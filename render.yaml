@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: housefinance-api
+    runtime: python
+    plan: free
+    region: singapore
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:////var/data/bachelor_finance.db
+      - key: CORS_ORIGINS
+        value: https://housefinance.vercel.app
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        value: onboarding@resend.dev
+      - key: VAPID_PRIVATE_KEY_PATH
+        value: /var/data/vapid_private.pem
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_EMAIL
+        sync: false
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 1

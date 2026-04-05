@@ -1,0 +1,18 @@
+{
+  "name": "HouseFinance - Bachelor House Finance",
+  "short_name": "HouseFinance",
+  "description": "Track rent and shared expenses with housemates",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#6366f1",
+  "background_color": "#f9fafb",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
