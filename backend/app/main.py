@@ -48,6 +48,15 @@ def create_app() -> FastAPI:
     app.include_router(rent_router)
     app.include_router(push_router)
 
+    @app.get("/")
+    def root():
+        return {
+            "app": "Bachelor House Finance API",
+            "status": "running",
+            "docs": "/docs",
+            "health": "/api/health",
+        }
+
     @app.get("/api/health")
     def health_check():
         return {"status": "ok", "app": "Bachelor House Finance"}
