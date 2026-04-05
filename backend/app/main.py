@@ -32,12 +32,16 @@ def create_app() -> FastAPI:
     # Create tables
     Base.metadata.create_all(bind=engine)
 
-    # Background scheduler for month-end emails
+    # Background scheduler for month-end emails (best-effort)
     @app.on_event("startup")
     async def start_scheduler():
-        import asyncio
-        from app.reports.scheduler import scheduler_loop
-        asyncio.create_task(scheduler_loop())
+        try:
+            import asyncio
+            from app.reports.scheduler import scheduler_loop
+            asyncio.create_task(scheduler_loop())
+        except Exception as e:
+            import logging
+            logging.warning(f"Scheduler did not start: {e}")
 
     # Register routers
     app.include_router(auth_router)

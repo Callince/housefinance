@@ -1,6 +1,8 @@
 """Web Push notification sender using VAPID."""
 import json
 import logging
+import os
+import tempfile
 from pywebpush import webpush, WebPushException
 from py_vapid import Vapid01
 from sqlalchemy.orm import Session
@@ -9,6 +11,19 @@ from app.config import settings
 from app.models import PushSubscription
 
 log = logging.getLogger(__name__)
+
+
+def _load_vapid():
+    """Load VAPID instance from env var PEM content or file path."""
+    if settings.VAPID_PRIVATE_KEY_PEM:
+        # Write PEM content to a temp file since Vapid01.from_file needs a path
+        tmp_path = os.path.join(tempfile.gettempdir(), "_vapid_priv.pem")
+        with open(tmp_path, "w") as f:
+            f.write(settings.VAPID_PRIVATE_KEY_PEM.replace("\\n", "\n"))
+        return Vapid01.from_file(private_key_file=tmp_path)
+    if os.path.exists(settings.VAPID_PRIVATE_KEY_PATH):
+        return Vapid01.from_file(private_key_file=settings.VAPID_PRIVATE_KEY_PATH)
+    raise FileNotFoundError("No VAPID key configured (set VAPID_PRIVATE_KEY_PEM env var)")
 
 
 def send_push_to_user(db: Session, user_id: int, title: str, body: str, url: str = "/", tag: str = None) -> dict:
@@ -32,9 +47,9 @@ def send_push_to_user(db: Session, user_id: int, title: str, body: str, url: str
     to_delete = []
     last_error = None
 
-    # Load VAPID instance once (pywebpush accepts a Vapid01 object directly)
+    # Load VAPID instance once
     try:
-        vapid = Vapid01.from_file(private_key_file=settings.VAPID_PRIVATE_KEY_PATH)
+        vapid = _load_vapid()
     except Exception as e:
         return {"sent": 0, "failed": len(subscriptions), "error": f"VAPID key load failed: {e}"}
 

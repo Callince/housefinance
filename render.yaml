@@ -8,26 +8,23 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
+    autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
         value: "3.11"
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        value: sqlite:////var/data/bachelor_finance.db
+        value: sqlite:///./bachelor_finance.db
       - key: CORS_ORIGINS
-        value: https://housefinance.vercel.app
+        value: https://housefinance.vercel.app,https://housefinance-callince.vercel.app
       - key: RESEND_API_KEY
         sync: false
       - key: RESEND_FROM_EMAIL
         value: onboarding@resend.dev
-      - key: VAPID_PRIVATE_KEY_PATH
-        value: /var/data/vapid_private.pem
+      - key: VAPID_PRIVATE_KEY_PEM
+        sync: false
       - key: VAPID_PUBLIC_KEY
-        sync: false
+        value: BFj_94ya3ZSHukaY9hVIrKxFsSDEtPzURMFSYnQbCw8ZsqaoNL-alSrE82vcO_TejTUt-tfI0edaV2IuFCBUx0w
       - key: VAPID_EMAIL
-        sync: false
-    disk:
-      name: data
-      mountPath: /var/data
-      sizeGB: 1
+        value: mailto:goodsoncallince@gmail.com
