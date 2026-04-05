@@ -14,7 +14,10 @@ export function pushSupported() {
 export async function registerServiceWorker() {
   if (!pushSupported()) return null;
   try {
-    const reg = await navigator.serviceWorker.register('/sw.js');
+    // Use import.meta.env.BASE_URL to respect GitHub Pages subpath
+    const base = import.meta.env.BASE_URL || '/';
+    const swUrl = base + 'sw.js'.replace(/^\//, '');
+    const reg = await navigator.serviceWorker.register(swUrl, { scope: base });
     await navigator.serviceWorker.ready;
     return reg;
   } catch (e) {

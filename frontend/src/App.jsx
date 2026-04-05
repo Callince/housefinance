@@ -13,7 +13,7 @@ import HouseSettings from './pages/HouseSettings';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
           <Navbar />
