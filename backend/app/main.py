@@ -62,7 +62,7 @@ def create_app() -> FastAPI:
             "health": "/api/health",
         }
 
-    @app.get("/api/health")
+    @app.api_route("/api/health", methods=["GET", "HEAD"])
     def health_check():
         return {"status": "ok", "app": "Bachelor House Finance"}
 
