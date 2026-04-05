@@ -1,0 +1,32 @@
+name: housefinance-api
+services:
+  - name: api
+    type: web
+    instance_type: free
+    regions:
+      - sin  # Singapore (closest to India)
+    routes:
+      - path: /
+        port: 8000
+    ports:
+      - port: 8000
+        protocol: http
+    health_checks:
+      - http:
+          path: /api/health
+          port: 8000
+    build:
+      type: docker
+      dockerfile: backend/Dockerfile
+      context: backend
+    env:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: DATABASE_URL
+        value: sqlite:///./bachelor_finance.db
+      - key: RESEND_FROM_EMAIL
+        value: onboarding@resend.dev
+      - key: VAPID_PUBLIC_KEY
+        value: BFj_94ya3ZSHukaY9hVIrKxFsSDEtPzURMFSYnQbCw8ZsqaoNL-alSrE82vcO_TejTUt-tfI0edaV2IuFCBUx0w
+      - key: VAPID_EMAIL
+        value: mailto:goodsoncallince@gmail.com
