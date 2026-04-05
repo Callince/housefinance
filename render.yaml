@@ -17,7 +17,7 @@ services:
       - key: DATABASE_URL
         value: sqlite:///./bachelor_finance.db
       - key: CORS_ORIGINS
-        value: https://housefinance.vercel.app,https://housefinance-callince.vercel.app
+        value: https://callince.github.io,https://housefinance.vercel.app
       - key: RESEND_API_KEY
         sync: false
       - key: RESEND_FROM_EMAIL

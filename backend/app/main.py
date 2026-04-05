@@ -23,7 +23,8 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
-        allow_origin_regex=r"https://.*\.vercel\.app",  # any vercel preview URL
+        # Allow any vercel/github pages URL
+        allow_origin_regex=r"https://([\w-]+\.vercel\.app|[\w-]+\.github\.io)",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
